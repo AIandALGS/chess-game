@@ -4,9 +4,6 @@ import pygame
 class EventManager:
     """
     The event manager class keeps tracks of all pygame events.
-
-    Attributes:
-    __music_manager - a private variable defined to
     """
 
     def __init__(self) -> None:
