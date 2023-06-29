@@ -12,6 +12,7 @@ def main(event_manager: EventManager, screen: pygame.Surface, clock: pygame.time
         game_running = event_manager.poll_events()
 
         board.draw_board(screen)
+        board.render(screen)
 
         pygame.display.update()
         clock.tick(FRAME_RATE)

@@ -1,1 +1,1 @@
-board.draw_board(screen)
+16
