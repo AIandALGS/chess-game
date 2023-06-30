@@ -3,10 +3,13 @@ import pygame
 from manager.chess_manager import ChessManager
 
 from src.utilities.utils import Utils
-from src.chess_pieces.chess_type import ChessType
+from src.gui.mouse import Mouse
 
 
-from src.chess_pieces.chess_position_constants import WHITE_INITIAL_POSITIONS, BLACK_INITIAL_POSITIONS
+from src.chess_pieces.chess_position_constants import (
+    WHITE_INITIAL_POSITIONS,
+    BLACK_INITIAL_POSITIONS,
+)
 
 from src.constants import (
     BOARD_SIZE,
@@ -17,10 +20,10 @@ from src.constants import (
 
 
 class Board:
-
     def __init__(self):
         self.__board = self.initialize_board()
         self.__rects = self.initialize_rects()
+        self.__mouse = Mouse()
 
     def initialize_board(self):
         board = dict()
@@ -48,6 +51,12 @@ class Board:
 
         return rects
 
+    def get_list_of_rects(self):
+        return self.__rects.values()
+
+    def update(self):
+        self.__mouse.update(self.__board, self.get_list_of_rects())
+
     def draw_board(self, screen):
         for position in self.__board:
             x = position[0]
@@ -62,5 +71,8 @@ class Board:
         for position in self.__board:
             if self.__board[position] is not None:
                 chess_txtr, chess_rect = ChessManager.get_chess_piece(
-                    self.__board, position)
+                    self.__board, position
+                )
                 screen.blit(chess_txtr, chess_rect)
+
+        self.__mouse.render(screen, self.get_list_of_rects())

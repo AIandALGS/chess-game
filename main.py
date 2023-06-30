@@ -3,6 +3,7 @@ import pygame
 from manager.event_manager import EventManager
 from src.chess_board.board import Board
 
+
 def main(event_manager: EventManager, screen: pygame.Surface, clock: pygame.time.Clock):
     game_running = True
 
@@ -11,11 +12,13 @@ def main(event_manager: EventManager, screen: pygame.Surface, clock: pygame.time
 
         game_running = event_manager.poll_events()
 
+        board.update()
         board.draw_board(screen)
         board.render(screen)
 
         pygame.display.update()
         clock.tick(FRAME_RATE)
+
 
 if __name__ == "__main__":
     import os
@@ -24,7 +27,7 @@ if __name__ == "__main__":
         WINDOW_DISPLAY_WIDTH,
         WINDOW_DISPLAY_HEIGHT,
         BLACK,
-        FRAME_RATE
+        FRAME_RATE,
     )
 
     os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -32,7 +35,7 @@ if __name__ == "__main__":
     pygame.init()
 
     screen = pygame.display.set_mode((WINDOW_DISPLAY_WIDTH, WINDOW_DISPLAY_HEIGHT), 16)
-    
+
     event_manager = EventManager()
 
     board = Board()

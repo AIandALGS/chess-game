@@ -1,8 +1,7 @@
-from strenum import StrEnum
+from enum import Enum
 
 
-class ChessType(StrEnum):
-
+class ChessType(Enum):
     # White pieces
     WHITE_KING: str = "data/textures/white/white_king.png"
     WHITE_QUEEN: str = "data/textures/white/white_queen.png"

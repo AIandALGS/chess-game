@@ -16,7 +16,7 @@ WHITE_INITIAL_POSITIONS = {
     (2, 7): ChessType.WHITE_BISHOP,
     (5, 7): ChessType.WHITE_BISHOP,
     (3, 7): ChessType.WHITE_QUEEN,
-    (4, 7): ChessType.WHITE_KING
+    (4, 7): ChessType.WHITE_KING,
 }
 
 BLACK_INITIAL_POSITIONS = {
@@ -36,5 +36,4 @@ BLACK_INITIAL_POSITIONS = {
     (5, 0): ChessType.BLACK_BISHOP,
     (3, 0): ChessType.BLACK_QUEEN,
     (4, 0): ChessType.BLACK_KING,
-
 }

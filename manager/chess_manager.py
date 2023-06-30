@@ -3,12 +3,10 @@ import pygame
 from src.chess_pieces.chess_type import ChessType
 from src.utilities.utils import Utils
 
-from src.constants import (
-    CHESS_PIECE_SIZE
-)
+from src.constants import CHESS_PIECE_SIZE
+
 
 class ChessManager:
-
     @staticmethod
     def get_chess_txtr(chess_type):
         chess_path = chess_type.value
@@ -24,4 +22,3 @@ class ChessManager:
         chess_rect = pygame.Rect(*global_position, *CHESS_PIECE_SIZE)
 
         return chess_txtr, chess_rect
-
