@@ -171,6 +171,78 @@ class ChessPiece:
     def get_bishop_moves(board, position, player):
         positions = []
 
+        # Get left upper diagonal
+        x, y = position[0] - 1, position[1] - 1
+        while x >= 0 and y >= 0:
+            p = (x, y)
+            chess_piece = board[p]
+
+            if chess_piece is not None:
+                if player in chess_piece.name.lower():
+                    break
+                else:
+                    positions.append(p)
+                    break
+
+            positions.append(p)
+
+            x -= 1
+            y -= 1
+
+        # Get right upper diagonal
+        x, y = position[0] + 1, position[1] - 1
+        while x < BOARD_SIZE and y >= 0:
+            p = (x, y)
+            chess_piece = board[p]
+
+            if chess_piece is not None:
+                if player in chess_piece.name.lower():
+                    break
+                else:
+                    positions.append(p)
+                    break
+
+            positions.append(p)
+
+            x += 1
+            y -= 1
+
+        # Get left lower diagonal
+        x, y = position[0] - 1, position[1] + 1
+        while x >= 0 and y < BOARD_SIZE:
+            p = (x, y)
+            chess_piece = board[p]
+
+            if chess_piece is not None:
+                if player in chess_piece.name.lower():
+                    break
+                else:
+                    positions.append(p)
+                    break
+
+            positions.append(p)
+
+            x -= 1
+            y += 1
+
+        # Get right lower diagonal
+        x, y = position[0] + 1, position[1] + 1
+        while x < BOARD_SIZE and y < BOARD_SIZE:
+            p = (x, y)
+            chess_piece = board[p]
+
+            if chess_piece is not None:
+                if player in chess_piece.name.lower():
+                    break
+                else:
+                    positions.append(p)
+                    break
+
+            positions.append(p)
+
+            x += 1
+            y += 1
+
         return positions
 
     @staticmethod
