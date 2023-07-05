@@ -1,6 +1,8 @@
 import pygame
 
 from manager.chess_manager import ChessManager
+from src.chess_pieces.chess_piece_switch import ChessPiece
+from src.utilities.matrix import Matrix
 
 from src.utilities.utils import Utils
 from src.gui.mouse import Mouse
@@ -21,9 +23,13 @@ from src.constants import (
 
 class Board:
     def __init__(self):
+        self.__players = {"white": True, "black": False}
         self.__board = self.initialize_board()
         self.__rects = self.initialize_rects()
         self.__mouse = Mouse()
+        self.__moves = []
+        self.__selected = False
+        self.__current_position = None
 
     def initialize_board(self):
         board = dict()
@@ -57,6 +63,37 @@ class Board:
     def update(self, events):
         self.__mouse.update(self.__board, events)
 
+    def check_collision_and_clicked(self, mouse_clicked, rect):
+        return mouse_clicked and rect.collidepoint(Mouse.get_position())
+
+    def clear_moveset(self):
+        self.__moves.clear()
+        self.__selected = False
+        self.__current_position = None
+
+    def update_moves(self, mouse_clicked, position):
+        for move in self.__moves:
+            if self.check_collision_and_clicked(mouse_clicked, move):
+                self.__board[position] = self.__board[self.__current_position]
+                self.__board[self.__current_position] = None
+                self.clear_moveset()
+                self.__board = Matrix.rotate_board(self.__board)
+
+    def update(self, events):
+        mouse_clicked = Mouse.get_mouse_click(events)
+        position = Mouse.get_local_mouse_position()
+
+        if mouse_clicked:
+            if not self.__selected or self.__current_position != position:
+                if self.__board[position] is not None:
+                    self.__moves = ChessPiece.get_moves(self.__board, position)
+                    self.__selected = True
+                    self.__current_position = position
+            else:
+                self.clear_moveset()
+
+        self.update_moves(mouse_clicked, position)
+
     def draw_board(self, screen):
         for position in self.__board:
             x = position[0]
@@ -75,4 +112,4 @@ class Board:
                 )
                 screen.blit(chess_txtr, chess_rect)
 
-        self.__mouse.render(screen, self.get_list_of_rects())
+        self.__mouse.render(screen, self.get_list_of_rects(), self.__moves)
