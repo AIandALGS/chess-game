@@ -23,7 +23,7 @@ from src.constants import (
 
 class Board:
     def __init__(self):
-        self.__players = {"white": True, "black": False}
+        self.__current_player = "white"
         self.__board = self.initialize_board()
         self.__rects = self.initialize_rects()
         self.__mouse = Mouse()
@@ -78,6 +78,20 @@ class Board:
                 self.__board[self.__current_position] = None
                 self.clear_moveset()
                 self.__board = Matrix.rotate_board(self.__board)
+                self.change_player()
+
+    def end_turn(self, position, chess_type):
+        if chess_type is not None:
+            if self.__current_player in chess_type.name.lower():
+                self.__moves = ChessPiece.get_moves(self.__board, position)
+                self.__selected = True
+                self.__current_position = position
+
+    def change_player(self):
+        if self.__current_player == "white":
+            self.__current_player = "black"
+        else:
+            self.__current_player = "white"
 
     def update(self, events):
         mouse_clicked = Mouse.get_mouse_click(events)
@@ -85,10 +99,8 @@ class Board:
 
         if mouse_clicked:
             if not self.__selected or self.__current_position != position:
-                if self.__board[position] is not None:
-                    self.__moves = ChessPiece.get_moves(self.__board, position)
-                    self.__selected = True
-                    self.__current_position = position
+                chess_type = self.__board[position]
+                self.end_turn(position, chess_type)
             else:
                 self.clear_moveset()
 
