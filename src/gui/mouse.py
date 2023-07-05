@@ -3,8 +3,7 @@ import pygame
 from src.gui.hitbox import Hitbox
 from src.utilities.utils import Utils
 from src.utilities.matrix import Matrix
-from src.chess_pieces.chess_piece_switch import ChessPieceSwitch
-from src.constants import BOARD_SIZE, BOARD_FLIPS
+from src.chess_pieces.chess_piece_switch import ChessPiece
 
 
 class Mouse:
@@ -52,7 +51,7 @@ class Mouse:
         if mouse_clicked:
             if not self.__selected or self.__current_position != position:
                 if board[position] is not None:
-                    self.__moves = ChessPieceSwitch.get_moves(board, position)
+                    self.__moves = ChessPiece.get_moves(board, position)
                     self.__selected = True
                     self.__current_position = position
             else:
