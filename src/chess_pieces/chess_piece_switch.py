@@ -6,7 +6,9 @@ from src.utilities.utils import Utils
 
 class ChessPieceSwitch:
     @staticmethod
-    def get_moves(board, position, chess_type):
+    def get_moves(board, position):
+        chess_type = board[position]
+
         match chess_type:
             case ChessType.WHITE_PAWN:
                 return ChessPieceSwitch.get_white_pawn_moves(board, position)
@@ -26,6 +28,15 @@ class ChessPieceSwitch:
                     positions.append(p)
                 else:
                     break
+
+        else:
+            x = position[0]
+            y = position[1] - 1
+
+            p = (x, y)
+
+            if board[p] is None:
+                positions.append(p)
 
         return Utils.get_rect_list(positions)
 

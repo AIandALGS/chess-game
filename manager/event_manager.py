@@ -7,7 +7,7 @@ class EventManager:
     """
 
     def __init__(self) -> None:
-        ...
+        self.__click = False
 
     def poll_events(self) -> bool:
         """
@@ -19,8 +19,13 @@ class EventManager:
 
         game_running = True
 
-        for event in pygame.event.get():
+        events = pygame.event.get()
+
+        for event in events:
             if event.type == pygame.QUIT:
                 game_running = False
 
-        return game_running
+        return game_running, events
+
+    def poll_click_events(self):
+        return self.__click

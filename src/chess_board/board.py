@@ -54,8 +54,8 @@ class Board:
     def get_list_of_rects(self):
         return self.__rects.values()
 
-    def update(self):
-        self.__mouse.update(self.__board, self.get_list_of_rects())
+    def update(self, events):
+        self.__mouse.update(self.__board, events)
 
     def draw_board(self, screen):
         for position in self.__board:

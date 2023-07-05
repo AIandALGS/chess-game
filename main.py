@@ -10,9 +10,9 @@ def main(event_manager: EventManager, screen: pygame.Surface, clock: pygame.time
     while game_running:
         screen.fill(BLACK)
 
-        game_running = event_manager.poll_events()
+        game_running, events = event_manager.poll_events()
 
-        board.update()
+        board.update(events)
         board.draw_board(screen)
         board.render(screen)
 
