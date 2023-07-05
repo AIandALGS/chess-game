@@ -60,9 +60,6 @@ class Board:
     def get_list_of_rects(self):
         return self.__rects.values()
 
-    def update(self, events):
-        self.__mouse.update(self.__board, events)
-
     def check_collision_and_clicked(self, mouse_clicked, rect):
         return mouse_clicked and rect.collidepoint(Mouse.get_position())
 
@@ -71,19 +68,12 @@ class Board:
         self.__selected = False
         self.__current_position = None
 
-    def update_moves(self, mouse_clicked, position):
-        for move in self.__moves:
-            if self.check_collision_and_clicked(mouse_clicked, move):
-                self.__board[position] = self.__board[self.__current_position]
-                self.__board[self.__current_position] = None
-                self.clear_moveset()
-                self.__board = Matrix.rotate_board(self.__board)
-                self.change_player()
-
     def end_turn(self, position, chess_type):
         if chess_type is not None:
             if self.__current_player in chess_type.name.lower():
-                self.__moves = ChessPiece.get_moves(self.__board, position)
+                self.__moves = ChessPiece.get_moves(
+                    self.__board, position, self.__current_player
+                )
                 self.__selected = True
                 self.__current_position = position
 
@@ -92,6 +82,16 @@ class Board:
             self.__current_player = "black"
         else:
             self.__current_player = "white"
+
+    def update_moves(self, mouse_clicked, position):
+        for move in self.__moves:
+            if self.check_collision_and_clicked(mouse_clicked, move):
+                self.__board[position] = self.__board[self.__current_position]
+                self.__board[self.__current_position] = None
+                self.__board = Matrix.rotate_board(self.__board)
+
+                self.clear_moveset()
+                self.change_player()
 
     def update(self, events):
         mouse_clicked = Mouse.get_mouse_click(events)

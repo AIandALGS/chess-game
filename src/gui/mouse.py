@@ -7,7 +7,6 @@ from src.chess_pieces.chess_piece_switch import ChessPiece
 
 
 class Mouse:
-
     @staticmethod
     def get_position():
         return pygame.mouse.get_pos()
