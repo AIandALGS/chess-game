@@ -4,7 +4,7 @@ from src.constants import BOARD_SIZE
 
 class Bishop:
     @staticmethod
-    def get_moves(board, position, player):
+    def get_player_moves(board, position, player):
         x, y = position
         positions = []
 
@@ -77,3 +77,7 @@ class Bishop:
             dy += 1
 
         return positions
+
+    @staticmethod
+    def get_opponent_moves(board, position, opponent):
+        return Bishop.get_player_moves(board, position, opponent)

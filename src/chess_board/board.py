@@ -8,16 +8,13 @@ from src.utilities.matrix import Matrix
 from src.utilities.utils import Utils
 from src.gui.mouse import Mouse
 
-from src.chess_pieces.chess_position_constants import (
-    WHITE_INITIAL_POSITIONS,
-    BLACK_INITIAL_POSITIONS,
-)
-
 from src.constants import (
     BOARD_SIZE,
     SQUARE_SIZE,
     LIGHT_SQUARE,
     DARK_SQUARE,
+    WHITE_INITIAL_POSITIONS,
+    BLACK_INITIAL_POSITIONS
 )
 
 
@@ -28,7 +25,7 @@ class Board:
         self.__rects = self.initialize_rects()
         self.__effects_manager = EffectsManager()
         self.__mouse = Mouse()
-        self.__moves = []
+        self.__legal_moves = []
         self.__selected = False
         self.__current_position = None
 
@@ -69,14 +66,14 @@ class Board:
         return mouse_clicked and rect.collidepoint(Mouse.get_position())
 
     def clear_moveset(self):
-        self.__moves.clear()
+        self.__legal_moves.clear()
         self.__selected = False
         self.__current_position = None
 
-    def end_turn(self, position, chess_type):
+    def get_legal_moves(self, position, chess_type):
         if chess_type is not None:
             if self.__current_player in chess_type.name.lower():
-                self.__moves = ChessPieceFactory.get_moves(
+                self.__legal_moves = ChessPieceFactory.get_moves(
                     self.__board, position, self.__current_player
                 )
                 self.__selected = True
@@ -92,7 +89,7 @@ class Board:
         self.__effects_manager.play_sound("move")
 
     def update_moves(self, mouse_clicked, position):
-        for move in self.__moves:
+        for move in self.__legal_moves:
             if self.check_collision_and_clicked(mouse_clicked, move):
                 self.__board[position] = self.__board[self.__current_position]
                 self.__board[self.__current_position] = None
@@ -108,7 +105,7 @@ class Board:
         if mouse_clicked:
             if not self.__selected or self.__current_position != position:
                 chess_type = self.__board[position]
-                self.end_turn(position, chess_type)
+                self.get_legal_moves(position, chess_type)
             else:
                 self.clear_moveset()
 
@@ -132,4 +129,5 @@ class Board:
                 )
                 screen.blit(chess_txtr, chess_rect)
 
-        self.__mouse.render(screen, self.get_list_of_rects(), self.__moves)
+        self.__mouse.render(
+            screen, self.get_list_of_rects(), self.__legal_moves)

@@ -3,7 +3,7 @@ from src.utilities.utils import Utils
 
 class Pawn:
     @staticmethod
-    def get_moves(board, position, player):
+    def get_player_moves(board, position, player):
         x, y = position
         positions = []
 
@@ -35,6 +35,23 @@ class Pawn:
                 positions.append(delta)
 
         # En Passant
+
+        return positions
+
+    @staticmethod
+    def get_opponent_moves(board, position, opponent):
+        x, y = position
+        positions = []
+
+        # Diagonal pawn capture moves
+        DX = [-1, 1]
+        DY = [1, 1]
+
+        for dx, dy in zip(DX, DY):
+            delta = (x + dx, y + dy)
+
+            if Pawn.valid_diagonal_move(board, delta, opponent):
+                positions.append(delta)
 
         return positions
 

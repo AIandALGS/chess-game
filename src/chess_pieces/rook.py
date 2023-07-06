@@ -1,10 +1,11 @@
+
 from src.utilities.utils import Utils
 from src.constants import BOARD_SIZE
 
 
 class Rook:
     @staticmethod
-    def get_moves(board, position, player):
+    def get_player_moves(board, position, player):
         x, y = position
         positions = []
 
@@ -61,3 +62,7 @@ class Rook:
             positions.append(delta)
 
         return positions
+
+    @staticmethod
+    def get_opponent_moves(board, position, opponent):
+        return Rook.get_player_moves(board, position, opponent)

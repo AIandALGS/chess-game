@@ -1,26 +1,25 @@
 from src.utilities.utils import Utils
 
 
-class Knight:
+class King:
+
     @staticmethod
     def get_player_moves(board, position, player):
         x, y = position
         positions = []
 
-        DX = [-2, -2, 2, 2, -1, 1, -1, 1]
-        DY = [-1, 1, -1, 1, -2, -2, 2, 2]
+        for dx in (-1, 0, 1):
+            for dy in (-1, 0, 1):
+                delta = (x+dx, y+dy)
 
-        for dx, dy in zip(DX, DY):
-            delta = (x + dx, y + dy)
-
-            if Knight.valid_move(board, delta, player):
-                positions.append(delta)
+                if King.valid_move(board, delta, player):
+                    positions.append(delta)
 
         return positions
 
     @staticmethod
-    def get_opponent_moves(board, position, opponent):
-        return Knight.get_player_moves(board, position, opponent)
+    def is_check(player_position, opponent_positions):
+        return player_position in opponent_positions
 
     @staticmethod
     def valid_move(board, position, player):
