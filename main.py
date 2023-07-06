@@ -31,13 +31,12 @@ if __name__ == "__main__":
     )
 
     os.environ["SDL_VIDEO_CENTERED"] = "1"
-
     pygame.init()
 
-    screen = pygame.display.set_mode((WINDOW_DISPLAY_WIDTH, WINDOW_DISPLAY_HEIGHT), 16)
+    screen = pygame.display.set_mode(
+        (WINDOW_DISPLAY_WIDTH, WINDOW_DISPLAY_HEIGHT), 16)
 
     event_manager = EventManager()
-
     board = Board()
 
     main(event_manager, screen, pygame.time.Clock())
