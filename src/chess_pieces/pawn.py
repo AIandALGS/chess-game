@@ -6,7 +6,6 @@ class Pawn:
     @staticmethod
     def get_moves(board, position, player):
         x, y = position
-
         positions = []
 
         # Starting pawn move

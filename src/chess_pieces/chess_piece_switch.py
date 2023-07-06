@@ -1,5 +1,8 @@
 from src.utilities.utils import Utils
 from src.chess_pieces.pawn import Pawn
+from src.chess_pieces.rook import Rook
+
+
 from src.constants import CHESS_PIECES, BOARD_SIZE
 
 
@@ -24,63 +27,7 @@ class ChessPiece:
 
     @staticmethod
     def get_rook_moves(board, position, player):
-        positions = []
-
-        # Check horizontal directions
-        for x in range(position[0] - 1, -1, -1):
-            p = (x, position[1])
-            chess_piece = board[p]
-
-            if chess_piece is not None:
-                if player in chess_piece.name.lower():
-                    break
-                else:
-                    positions.append(p)
-                    break
-
-            positions.append(p)
-
-        for x in range(position[0] + 1, BOARD_SIZE):
-            p = (x, position[1])
-            chess_piece = board[p]
-
-            if chess_piece is not None:
-                if player in chess_piece.name.lower():
-                    break
-                else:
-                    positions.append(p)
-                    break
-
-            positions.append(p)
-
-        # Check the vertical directions
-        for y in range(position[1] - 1, -1, -1):
-            p = (position[0], y)
-            chess_piece = board[p]
-
-            if chess_piece is not None:
-                if player in chess_piece.name.lower():
-                    break
-                else:
-                    positions.append(p)
-                    break
-
-            positions.append(p)
-
-        for y in range(position[1] + 1, BOARD_SIZE):
-            p = (position[0], y)
-            chess_piece = board[p]
-
-            if chess_piece is not None:
-                if player in chess_piece.name.lower():
-                    break
-                else:
-                    positions.append(p)
-                    break
-
-            positions.append(p)
-
-        return positions
+        return Rook.get_moves(board, position, player)
 
     @staticmethod
     def get_knight_moves(board, position, player):
