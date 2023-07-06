@@ -2,17 +2,16 @@ from src.utilities.utils import Utils
 
 
 class Knight:
-
     @staticmethod
     def get_moves(board, position, player):
         x, y = position
         positions = []
 
-        DX = [-2, -2,  2,  2, -1,  1, -1,  1]
-        DY = [-1,  1, -1,  1, -2, -2,  2,  2]
+        DX = [-2, -2, 2, 2, -1, 1, -1, 1]
+        DY = [-1, 1, -1, 1, -2, -2, 2, 2]
 
         for dx, dy in zip(DX, DY):
-            delta = (x+dx, y+dy)
+            delta = (x + dx, y + dy)
 
             if Knight.valid_move(board, delta, player):
                 positions.append(delta)

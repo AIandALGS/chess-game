@@ -9,8 +9,7 @@ from src.chess_pieces.queen import Queen
 from src.constants import CHESS_PIECES
 
 
-class ChessPiece:
-
+class ChessPieceFactory:
     @staticmethod
     def get_moves(board, position, player):
         chess_type = board[position]
@@ -19,7 +18,7 @@ class ChessPiece:
             if chess_piece in chess_type.name.lower():
                 break
 
-        chess_move = getattr(ChessPiece, "get_" + chess_piece + "_moves")
+        chess_move = getattr(ChessPieceFactory, "get_" + chess_piece + "_moves")
         positions = chess_move(board, position, player)
 
         return Utils.get_rect_list(positions)
@@ -45,5 +44,5 @@ class ChessPiece:
         return Queen.get_moves(board, position, player)
 
     @staticmethod
-    def get_king_moves(board, position):
+    def get_king_moves(board, position, player):
         ...

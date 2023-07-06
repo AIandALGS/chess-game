@@ -3,14 +3,13 @@ from src.constants import BOARD_SIZE
 
 
 class Bishop:
-
     @staticmethod
     def get_moves(board, position, player):
         x, y = position
         positions = []
 
         # Get left upper bishop diagonal
-        dx, dy = x-1, y-1
+        dx, dy = x - 1, y - 1
         while dx >= 0 and dy >= 0:
             delta = (dx, dy)
 
@@ -27,7 +26,7 @@ class Bishop:
             dy -= 1
 
         # Get right upper bishop diagonal
-        dx, dy = x+1, y-1
+        dx, dy = x + 1, y - 1
         while dx < BOARD_SIZE and dy >= 0:
             delta = (dx, dy)
 
@@ -44,7 +43,7 @@ class Bishop:
             dy -= 1
 
         # Get left lower bishop diagonal
-        dx, dy = x-1, y+1
+        dx, dy = x - 1, y + 1
         while dx >= 0 and dy < BOARD_SIZE:
             delta = (dx, dy)
 
@@ -61,7 +60,7 @@ class Bishop:
             dy += 1
 
         # Get right lower bishop diagonal
-        dx, dy = x+1, y+1
+        dx, dy = x + 1, y + 1
         while dx < BOARD_SIZE and dy < BOARD_SIZE:
             delta = (dx, dy)
 

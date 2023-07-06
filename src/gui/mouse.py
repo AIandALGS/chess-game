@@ -2,8 +2,6 @@ import pygame
 
 from src.gui.hitbox import Hitbox
 from src.utilities.utils import Utils
-from src.utilities.matrix import Matrix
-from src.chess_pieces.chess_piece_switch import ChessPiece
 
 
 class Mouse:

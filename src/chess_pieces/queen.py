@@ -3,7 +3,6 @@ from src.chess_pieces.rook import Rook
 
 
 class Queen:
-
     @staticmethod
     def get_moves(board, position, player):
         positions = []

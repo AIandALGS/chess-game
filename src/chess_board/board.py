@@ -3,7 +3,7 @@ import pygame
 from manager.chess_manager import ChessManager
 from manager.sound_manager import EffectsManager
 
-from src.chess_pieces.chess_piece_switch import ChessPiece
+from src.chess_pieces.chess_piece_factory import ChessPieceFactory
 from src.utilities.matrix import Matrix
 from src.utilities.utils import Utils
 from src.gui.mouse import Mouse
@@ -76,7 +76,7 @@ class Board:
     def end_turn(self, position, chess_type):
         if chess_type is not None:
             if self.__current_player in chess_type.name.lower():
-                self.__moves = ChessPiece.get_moves(
+                self.__moves = ChessPieceFactory.get_moves(
                     self.__board, position, self.__current_player
                 )
                 self.__selected = True
