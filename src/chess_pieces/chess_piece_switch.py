@@ -1,5 +1,6 @@
 from src.utilities.utils import Utils
 from src.chess_pieces.pawn import Pawn
+from src.chess_pieces.knight import Knight
 from src.chess_pieces.rook import Rook
 
 
@@ -26,62 +27,12 @@ class ChessPiece:
         return Pawn.get_moves(board, position, player)
 
     @staticmethod
-    def get_rook_moves(board, position, player):
-        return Rook.get_moves(board, position, player)
+    def get_knight_moves(board, position, player):
+        return Knight.get_moves(board, position, player)
 
     @staticmethod
-    def get_knight_moves(board, position, player):
-        positions = []
-
-        # Check upper direction
-        y = position[1] - 2
-        x = position[0] - 1
-        p = (x, y)
-        if ChessPiece.check_valid_position_knight(board, p, player):
-            positions.append(p)
-
-        x = position[0] + 1
-        p = (x, y)
-        if ChessPiece.check_valid_position_knight(board, p, player):
-            positions.append(p)
-
-        # Check lower direction
-        y = position[1] + 2
-        x = position[0] - 1
-        p = (x, y)
-        if ChessPiece.check_valid_position_knight(board, p, player):
-            positions.append(p)
-
-        x = position[0] + 1
-        p = (x, y)
-        if ChessPiece.check_valid_position_knight(board, p, player):
-            positions.append(p)
-
-        # Check left direction
-        x = position[0] - 2
-        y = position[1] - 1
-        p = (x, y)
-        if ChessPiece.check_valid_position_knight(board, p, player):
-            positions.append(p)
-
-        y = position[1] + 1
-        p = (x, y)
-        if ChessPiece.check_valid_position_knight(board, p, player):
-            positions.append(p)
-
-        # Check right direction
-        x = position[0] + 2
-        y = position[1] - 1
-        p = (x, y)
-        if ChessPiece.check_valid_position_knight(board, p, player):
-            positions.append(p)
-
-        y = position[1] + 1
-        p = (x, y)
-        if ChessPiece.check_valid_position_knight(board, p, player):
-            positions.append(p)
-
-        return positions
+    def get_rook_moves(board, position, player):
+        return Rook.get_moves(board, position, player)
 
     @staticmethod
     def get_bishop_moves(board, position, player):

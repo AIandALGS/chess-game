@@ -26,10 +26,10 @@ class Pawn:
                 positions.append(delta)
 
         # Diagonal pawn capture moves
-        X = [-1,  1]
-        Y = [-1, -1]
+        DX = [-1,  1]
+        DY = [-1, -1]
 
-        for dx, dy in zip(X, Y):
+        for dx, dy in zip(DX, DY):
             delta = (x+dx, y+dy)
 
             if Pawn.valid_diagonal_move(board, delta, player):
@@ -41,17 +41,23 @@ class Pawn:
 
     @staticmethod
     def valid_forward_move(board, position):
-        if Utils.is_position_in_range(position):
-            if Utils.is_empty_square(board, position):
-                return True
+        if not Utils.is_position_in_range(position):
+            return False
 
-        return False
+        if not Utils.is_empty_square(board, position):
+            return False
+
+        return True
 
     @staticmethod
     def valid_diagonal_move(board, position, player):
-        if Utils.is_position_in_range(position):
-            if not Utils.is_empty_square(board, position):
-                if Utils.is_opponent_position(board, position, player):
-                    return True
+        if not Utils.is_position_in_range(position):
+            return False
 
-        return False
+        if Utils.is_empty_square(board, position):
+            return False
+
+        if not Utils.is_opponent_position(board, position, player):
+            return False
+
+        return True

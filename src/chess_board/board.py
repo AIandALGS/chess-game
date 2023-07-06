@@ -1,12 +1,12 @@
 import pygame
 
 from manager.chess_manager import ChessManager
+from manager.sound_manager import EffectsManager
+
 from src.chess_pieces.chess_piece_switch import ChessPiece
 from src.utilities.matrix import Matrix
-
 from src.utilities.utils import Utils
 from src.gui.mouse import Mouse
-
 
 from src.chess_pieces.chess_position_constants import (
     WHITE_INITIAL_POSITIONS,
@@ -26,6 +26,7 @@ class Board:
         self.__current_player = "white"
         self.__board = self.initialize_board()
         self.__rects = self.initialize_rects()
+        self.__effects_manager = EffectsManager()
         self.__mouse = Mouse()
         self.__moves = []
         self.__selected = False
@@ -86,6 +87,9 @@ class Board:
             self.__current_player = "black"
         else:
             self.__current_player = "white"
+
+        # play sound
+        self.__effects_manager.play_sound("move")
 
     def update_moves(self, mouse_clicked, position):
         for move in self.__moves:
