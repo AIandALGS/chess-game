@@ -1,8 +1,10 @@
 from src.utilities.utils import Utils
+from src.chess_pieces.pawn import Pawn
 from src.constants import CHESS_PIECES, BOARD_SIZE
 
 
 class ChessPiece:
+
     @staticmethod
     def get_moves(board, position, player):
         chess_type = board[position]
@@ -18,48 +20,15 @@ class ChessPiece:
 
     @staticmethod
     def get_pawn_moves(board, position, player):
-        positions = []
-
-        # Check the forward direction
-        if position[1] == 6:
-            for height in range(2):
-                x = position[0]
-                y = position[1] - height - 1
-
-                p = (x, y)
-
-                if board[p] is None:
-                    positions.append(p)
-                else:
-                    break
-        else:
-            x = position[0]
-            y = position[1] - 1
-
-            p = (x, y)
-
-            if y in range(BOARD_SIZE):
-                if board[p] is None:
-                    positions.append(p)
-
-        # Check diagonals
-        p = (position[0] - 1, position[1] - 1)
-        if ChessPiece.check_valid_position_pawn(board, p, player):
-            positions.append(p)
-
-        p = (position[0] + 1, position[1] - 1)
-        if ChessPiece.check_valid_position_pawn(board, p, player):
-            positions.append(p)
-
-        return positions
+        return Pawn.get_moves(board, position, player)
 
     @staticmethod
     def get_rook_moves(board, position, player):
         positions = []
 
         # Check horizontal directions
-        for lx in range(position[0] - 1, -1, -1):
-            p = (lx, position[1])
+        for x in range(position[0] - 1, -1, -1):
+            p = (x, position[1])
             chess_piece = board[p]
 
             if chess_piece is not None:
@@ -71,8 +40,8 @@ class ChessPiece:
 
             positions.append(p)
 
-        for rx in range(position[0] + 1, BOARD_SIZE):
-            p = (rx, position[1])
+        for x in range(position[0] + 1, BOARD_SIZE):
+            p = (x, position[1])
             chess_piece = board[p]
 
             if chess_piece is not None:
@@ -85,8 +54,8 @@ class ChessPiece:
             positions.append(p)
 
         # Check the vertical directions
-        for uy in range(position[1] - 1, -1, -1):
-            p = (position[0], uy)
+        for y in range(position[1] - 1, -1, -1):
+            p = (position[0], y)
             chess_piece = board[p]
 
             if chess_piece is not None:
@@ -98,8 +67,8 @@ class ChessPiece:
 
             positions.append(p)
 
-        for by in range(position[1] + 1, BOARD_SIZE):
-            p = (position[0], by)
+        for y in range(position[1] + 1, BOARD_SIZE):
+            p = (position[0], y)
             chess_piece = board[p]
 
             if chess_piece is not None:

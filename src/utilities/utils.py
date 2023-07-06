@@ -1,6 +1,6 @@
 import pygame
 
-from src.constants import SQUARE_WIDTH, SQUARE_HEIGHT, SQUARE_SIZE
+from src.constants import BOARD_SIZE, SQUARE_WIDTH, SQUARE_HEIGHT, SQUARE_SIZE
 
 
 class Utils:
@@ -45,3 +45,15 @@ class Utils:
             rects.append(rect)
 
         return rects
+
+    @staticmethod
+    def is_empty_square(board, position):
+        return board[position] is None
+
+    @staticmethod
+    def is_position_in_range(position):
+        return position[0] in range(BOARD_SIZE) and position[1] in range(BOARD_SIZE)
+
+    @staticmethod
+    def is_opponent_position(board, position, player):
+        return player not in board[position].name.lower()

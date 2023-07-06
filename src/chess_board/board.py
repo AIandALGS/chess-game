@@ -31,6 +31,10 @@ class Board:
         self.__selected = False
         self.__current_position = None
 
+    @staticmethod
+    def get_empty_square(board, position):
+        return board[position] is None
+
     def initialize_board(self):
         board = dict()
 
