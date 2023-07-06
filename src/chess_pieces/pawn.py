@@ -50,7 +50,7 @@ class Pawn:
         for dx, dy in zip(DX, DY):
             delta = (x + dx, y + dy)
 
-            if Pawn.valid_diagonal_move(board, delta, opponent):
+            if Utils.is_position_in_range(delta):
                 positions.append(delta)
 
         return positions

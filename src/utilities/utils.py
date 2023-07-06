@@ -47,6 +47,10 @@ class Utils:
         return rects
 
     @staticmethod
+    def get_opponent(player):
+        return "black" if player == "white" else "white"
+
+    @staticmethod
     def is_empty_square(board, position):
         return board[position] is None
 

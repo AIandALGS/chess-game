@@ -3,7 +3,7 @@ import pygame
 from manager.chess_manager import ChessManager
 from manager.sound_manager import EffectsManager
 
-from src.chess_pieces.chess_piece_factory import ChessPieceFactory
+from src.chess_pieces.chess_move import ChessMove
 from src.utilities.matrix import Matrix
 from src.utilities.utils import Utils
 from src.gui.mouse import Mouse
@@ -73,7 +73,7 @@ class Board:
     def get_legal_moves(self, position, chess_type):
         if chess_type is not None:
             if self.__current_player in chess_type.name.lower():
-                self.__legal_moves = ChessPieceFactory.get_moves(
+                self.__legal_moves = ChessMove.get_moves(
                     self.__board, position, self.__current_player
                 )
                 self.__selected = True

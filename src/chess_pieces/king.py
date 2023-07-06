@@ -18,6 +18,10 @@ class King:
         return positions
 
     @staticmethod
+    def get_opponent_moves(board, position, opponent):
+        return King.get_player_moves(board, position, opponent)
+
+    @staticmethod
     def is_check(player_position, opponent_positions):
         return player_position in opponent_positions
 

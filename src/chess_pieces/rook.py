@@ -49,7 +49,7 @@ class Rook:
             positions.append(delta)
 
         # Get lower rook moves
-        for y in range(y + 1, BOARD_SIZE):
+        for dy in range(y + 1, BOARD_SIZE):
             delta = (x, dy)
 
             if not Utils.is_empty_square(board, delta):
