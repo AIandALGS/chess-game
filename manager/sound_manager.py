@@ -17,10 +17,13 @@ class EffectsManager:
         mixer.Channel(0).play(mixer.Sound(self.__sound_path + "move.wav"))
 
     def play_capture_sound(self):
-        mixer.Channel(1).play(mixer.Sound(self.__sound_path + "capture.wav"))
+        mixer.Channel(0).play(mixer.Sound(self.__sound_path + "capture.wav"))
 
     def play_check_sound(self):
-        mixer.Channel(2).play(mixer.Sound(self.__sound_path + "check.wav"))
+        mixer.Channel(1).play(mixer.Sound(self.__sound_path + "check.wav"))
 
     def play_checkmate_sound(self):
-        mixer.Channel(3).play(mixer.Sound(self.__sound_path + "checkmate.wav"))
+        mixer.Channel(2).play(mixer.Sound(self.__sound_path + "checkmate.wav"))
+
+    def play_stalemate_sound(self):
+        mixer.Channel(3).play(mixer.Sound(self.__sound_path + "stalemate.wav"))

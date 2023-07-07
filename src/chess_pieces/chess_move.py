@@ -8,7 +8,7 @@ from src.chess_pieces.king import King
 
 class ChessMove:
     @staticmethod
-    def get_legal_moves(board, player):
+    def get_legal_moves(board, player, castling_rights):
         player_king_position = Player.get_king_position(board, player)
         legal_moves = dict()
 
@@ -40,7 +40,8 @@ class ChessMove:
 
         opponent_moves = ChessMove.get_opponent_moves(board, player)
         king_moves = King.get_player_moves(
-            board, player_king_position, player, opponent_moves)
+            board, player_king_position, player, opponent_moves, castling_rights
+        )
 
         for king_move in king_moves:
             copy_board = copy.copy(board)
@@ -67,12 +68,10 @@ class ChessMove:
 
         for position in board:
             if not Utils.is_empty_square(board, position):
-                chess_move = Opponent.get_chess_moves(
-                    board, position, opponent)
+                chess_move = Opponent.get_chess_moves(board, position, opponent)
 
                 if chess_move is not None:
-                    opponent_moves |= set(
-                        chess_move(board, position, opponent))
+                    opponent_moves |= set(chess_move(board, position, opponent))
 
         opponent_moves |= set(
             Opponent.get_king_moves(board, opponent_king_position, opponent)
@@ -105,6 +104,19 @@ class ChessMove:
         opponent_moves = ChessMove.get_opponent_moves(board, player)
 
         if not King.is_check(player_king_position, opponent_moves):
+            return False
+
+        if ChessMove.get_number_of_legal_moves(legal_moves) > 0:
+            return False
+
+        return True
+
+    @staticmethod
+    def is_stalemate(board, player, legal_moves):
+        player_king_position = Player.get_king_position(board, player)
+        opponent_moves = ChessMove.get_opponent_moves(board, player)
+
+        if King.is_check(player_king_position, opponent_moves):
             return False
 
         if ChessMove.get_number_of_legal_moves(legal_moves) > 0:

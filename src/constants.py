@@ -64,3 +64,21 @@ BLACK_INITIAL_POSITIONS = {
     (3, 0): ChessType.BLACK_QUEEN,
     (4, 0): ChessType.BLACK_KING,
 }
+
+WHITE_CASTLING_RIGHTS = {
+    (4, 7): True,
+    (0, 7): True,
+    (7, 7): True,
+}
+
+BLACK_CASTLING_RIGHTS = {
+    (4, 7): True,
+    (0, 7): True,
+    (7, 7): True,
+}
+
+KING_POSITION = (4, 7)
+LEFT_KING_POSITION = (2, 7)
+RIGHT_KING_POSITION = (6, 7)
+LEFT_ROOK_POSITION = (0, 7)
+RIGHT_ROOK_POSITION = (7, 7)
