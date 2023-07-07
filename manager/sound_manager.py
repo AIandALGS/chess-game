@@ -9,9 +9,18 @@ class EffectsManager:
 
     def play_sound(self, board, position):
         if Utils.is_empty_square(board, position):
-            mixer.Channel(0).play(mixer.Sound(self.__sound_path + "move.wav"))
+            self.play_move_sound()
         else:
-            mixer.Channel(1).play(mixer.Sound(
-                self.__sound_path + "capture.wav"))
+            self.play_capture_sound()
 
-        # If it is en passant play capture
+    def play_move_sound(self):
+        mixer.Channel(0).play(mixer.Sound(self.__sound_path + "move.wav"))
+
+    def play_capture_sound(self):
+        mixer.Channel(1).play(mixer.Sound(self.__sound_path + "capture.wav"))
+
+    def play_check_sound(self):
+        mixer.Channel(2).play(mixer.Sound(self.__sound_path + "check.wav"))
+
+    def play_checkmate_sound(self):
+        mixer.Channel(3).play(mixer.Sound(self.__sound_path + "checkmate.wav"))

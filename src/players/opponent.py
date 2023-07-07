@@ -36,12 +36,12 @@ class Opponent:
         return King.get_opponent_moves(board, position, opponent)
 
     @staticmethod
-    def get_king_position(board, player):
+    def get_king_position(board, opponent):
         for position in board:
             if not Utils.is_empty_square(board, position):
                 chess_piece_name = board[position].name.lower()
 
-                if player in chess_piece_name and "king" in chess_piece_name:
+                if opponent in chess_piece_name and "king" in chess_piece_name:
                     break
 
         return position

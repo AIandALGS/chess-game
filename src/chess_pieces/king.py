@@ -35,15 +35,6 @@ class King:
     def is_check(king_position, opponent_positions):
         return king_position in opponent_positions
 
-    # @staticmethod
-    # def is_checkmate(king_position, legal_moves):
-
-    #     count = ChessMove.get_number_of_legal_moves(legal_moves)
-
-    #     if count > 0 and not King.is_check
-
-    #     return True
-
     @staticmethod
     def valid_move(board, position, player):
         if not Utils.is_position_in_range(position):

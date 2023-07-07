@@ -61,3 +61,13 @@ class Utils:
     @staticmethod
     def is_opponent_position(board, position, player):
         return player not in board[position].name.lower()
+
+    @staticmethod
+    def is_player_piece(board, position, player):
+        if Utils.is_empty_square(board, position):
+            return False
+
+        if player not in board[position].name.lower():
+            return False
+
+        return True

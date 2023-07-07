@@ -21,7 +21,6 @@ from src.constants import (
 
 class Board:
     def __init__(self):
-        self.__check_mate = False
         self.__current_player = "white"
         self.__board = self.initialize_board()
         self.__rects = self.initialize_rects()
@@ -75,27 +74,30 @@ class Board:
         self.__selected = False
         self.__current_position = None
 
-    def get_player_moves(self, position, chess_type):
-        if chess_type is not None:
-            if self.__current_player in chess_type.name.lower():
-                self.__player_moves = copy.copy(self.__legal_moves[position])
-                self.__selected = True
-                self.__current_position = position
+    def get_player_moves(self, position):
+        if Utils.is_player_piece(self.__board, position, self.__current_player):
+            self.__player_moves = copy.copy(self.__legal_moves[position])
+            self.__selected = True
+            self.__current_position = position
 
     def change_player(self):
-        if self.__current_player == "white":
-            self.__current_player = "black"
-        else:
-            self.__current_player = "white"
-
+        self.__current_player = "black" if self.__current_player == "white" else "white"
         self.__legal_moves = ChessMove.get_legal_moves(
             self.__board, self.__current_player
         )
+
+        if ChessMove.is_checkmate(
+            self.__board, self.__current_player, self.__legal_moves
+        ):
+            self.__effects_manager.play_checkmate_sound()
+        elif ChessMove.is_check(self.__board, self.__current_player):
+            self.__effects_manager.play_check_sound()
 
     def update_moves(self, mouse_clicked, position):
         for move in self.__player_moves:
             if self.check_collision_and_clicked(mouse_clicked, move):
                 self.__effects_manager.play_sound(self.__board, position)
+
                 self.__board[position] = self.__board[self.__current_position]
                 self.__board[self.__current_position] = None
                 self.__board = Matrix.rotate_board(self.__board)
@@ -109,8 +111,7 @@ class Board:
 
         if mouse_clicked:
             if not self.__selected or self.__current_position != position:
-                chess_type = self.__board[position]
-                self.get_player_moves(position, chess_type)
+                self.get_player_moves(position)
             else:
                 self.clear_moveset()
 
