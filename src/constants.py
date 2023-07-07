@@ -22,7 +22,7 @@ LIGHT_SQUARE = (240, 217, 181)
 DARK_SQUARE = (181, 136, 99)
 GREEN_CIRCLE = (106, 111, 64)
 
-CHESS_PIECES = {"pawn", "knight", "bishop", "rook", "queen", "king"}
+CHESS_PIECES = ["pawn", "knight", "bishop", "rook", "queen"]
 
 
 WHITE_INITIAL_POSITIONS = {

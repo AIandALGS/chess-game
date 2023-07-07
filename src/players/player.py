@@ -1,3 +1,5 @@
+from src.utilities.utils import Utils
+
 from src.chess_pieces.pawn import Pawn
 from src.chess_pieces.knight import Knight
 from src.chess_pieces.bishop import Bishop
@@ -33,6 +35,17 @@ class Player:
     @staticmethod
     def get_king_moves(board, position, player):
         return King.get_player_moves(board, position, player)
+
+    @staticmethod
+    def get_king_position(board, player):
+        for position in board:
+            if not Utils.is_empty_square(board, position):
+                chess_piece_name = board[position].name.lower()
+
+                if player in chess_piece_name and 'king' in chess_piece_name:
+                    break
+
+        return position
 
     @staticmethod
     def get_chess_moves(board, position, player):

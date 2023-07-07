@@ -4,7 +4,7 @@ from src.utilities.utils import Utils
 class King:
 
     @staticmethod
-    def get_player_moves(board, position, player):
+    def get_player_moves(board, position, player, opponent_moves):
         x, y = position
         positions = []
 
@@ -12,18 +12,29 @@ class King:
             for dy in (-1, 0, 1):
                 delta = (x+dx, y+dy)
 
-                if King.valid_move(board, delta, player):
-                    positions.append(delta)
+                if not King.is_check(delta, opponent_moves):
+                    if King.valid_move(board, delta, player):
+                        positions.append(delta)
 
         return positions
 
     @staticmethod
     def get_opponent_moves(board, position, opponent):
-        return King.get_player_moves(board, position, opponent)
+        x, y = position
+        positions = []
+
+        for dx in (-1, 0, 1):
+            for dy in (-1, 0, 1):
+                delta = (x+dx, y+dy)
+
+                if King.valid_move(board, delta, opponent):
+                    positions.append(delta)
+
+        return positions
 
     @staticmethod
-    def is_check(player_position, opponent_positions):
-        return player_position in opponent_positions
+    def is_check(king_position, opponent_positions):
+        return king_position in opponent_positions
 
     @staticmethod
     def valid_move(board, position, player):

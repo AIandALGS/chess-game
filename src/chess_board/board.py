@@ -1,3 +1,4 @@
+from copy import deepcopy
 import pygame
 
 from manager.chess_manager import ChessManager
@@ -20,12 +21,15 @@ from src.constants import (
 
 class Board:
     def __init__(self):
+        self.__check_mate = False
         self.__current_player = "white"
         self.__board = self.initialize_board()
         self.__rects = self.initialize_rects()
         self.__effects_manager = EffectsManager()
         self.__mouse = Mouse()
-        self.__legal_moves = []
+        self.__legal_moves = ChessMove.get_legal_moves(
+            self.__board, self.__current_player)
+        self.__player_moves = []
         self.__selected = False
         self.__current_position = None
 
@@ -66,16 +70,14 @@ class Board:
         return mouse_clicked and rect.collidepoint(Mouse.get_position())
 
     def clear_moveset(self):
-        self.__legal_moves.clear()
+        self.__player_moves.clear()
         self.__selected = False
         self.__current_position = None
 
-    def get_legal_moves(self, position, chess_type):
+    def get_player_moves(self, position, chess_type):
         if chess_type is not None:
             if self.__current_player in chess_type.name.lower():
-                self.__legal_moves = ChessMove.get_moves(
-                    self.__board, position, self.__current_player
-                )
+                self.__player_moves = deepcopy(self.__legal_moves[position])
                 self.__selected = True
                 self.__current_position = position
 
@@ -85,11 +87,12 @@ class Board:
         else:
             self.__current_player = "white"
 
-        # play sound
         self.__effects_manager.play_sound("move")
+        self.__legal_moves = ChessMove.get_legal_moves(
+            self.__board, self.__current_player)
 
     def update_moves(self, mouse_clicked, position):
-        for move in self.__legal_moves:
+        for move in self.__player_moves:
             if self.check_collision_and_clicked(mouse_clicked, move):
                 self.__board[position] = self.__board[self.__current_position]
                 self.__board[self.__current_position] = None
@@ -105,7 +108,7 @@ class Board:
         if mouse_clicked:
             if not self.__selected or self.__current_position != position:
                 chess_type = self.__board[position]
-                self.get_legal_moves(position, chess_type)
+                self.get_player_moves(position, chess_type)
             else:
                 self.clear_moveset()
 
@@ -130,4 +133,4 @@ class Board:
                 screen.blit(chess_txtr, chess_rect)
 
         self.__mouse.render(
-            screen, self.get_list_of_rects(), self.__legal_moves)
+            screen, self.get_list_of_rects(), self.__player_moves)
