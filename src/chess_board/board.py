@@ -88,7 +88,6 @@ class Board:
         else:
             self.__current_player = "white"
 
-        self.__effects_manager.play_sound("move")
         self.__legal_moves = ChessMove.get_legal_moves(
             self.__board, self.__current_player
         )
@@ -96,6 +95,7 @@ class Board:
     def update_moves(self, mouse_clicked, position):
         for move in self.__player_moves:
             if self.check_collision_and_clicked(mouse_clicked, move):
+                self.__effects_manager.play_sound(self.__board, position)
                 self.__board[position] = self.__board[self.__current_position]
                 self.__board[self.__current_position] = None
                 self.__board = Matrix.rotate_board(self.__board)
@@ -134,4 +134,5 @@ class Board:
                 )
                 screen.blit(chess_txtr, chess_rect)
 
-        self.__mouse.render(screen, self.get_list_of_rects(), self.__player_moves)
+        self.__mouse.render(
+            screen, self.get_list_of_rects(), self.__player_moves)
