@@ -20,7 +20,19 @@ class Knight:
 
     @staticmethod
     def get_opponent_moves(board, position, opponent):
-        return Knight.get_player_moves(board, position, opponent)
+        x, y = position
+        positions = []
+
+        DX = [-2, -2, 2, 2, -1, 1, -1, 1]
+        DY = [-1, 1, -1, 1, -2, -2, 2, 2]
+
+        for dx, dy in zip(DX, DY):
+            delta = (x + dx, y + dy)
+
+            if Utils.is_position_in_range(delta):
+                positions.append(delta)
+
+        return positions
 
     @staticmethod
     def valid_move(board, position, player):

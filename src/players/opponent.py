@@ -11,7 +11,6 @@ from src.constants import CHESS_PIECES
 
 
 class Opponent:
-
     @staticmethod
     def get_pawn_moves(board, position, opponent):
         return Pawn.get_opponent_moves(board, position, opponent)
@@ -42,7 +41,7 @@ class Opponent:
             if not Utils.is_empty_square(board, position):
                 chess_piece_name = board[position].name.lower()
 
-                if player in chess_piece_name and 'king' in chess_piece_name:
+                if player in chess_piece_name and "king" in chess_piece_name:
                     break
 
         return position

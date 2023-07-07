@@ -14,4 +14,9 @@ class Queen:
 
     @staticmethod
     def get_opponent_moves(board, position, opponent):
-        return Queen.get_player_moves(board, position, opponent)
+        positions = []
+
+        positions.extend(Bishop.get_opponent_moves(board, position, opponent))
+        positions.extend(Rook.get_opponent_moves(board, position, opponent))
+
+        return positions

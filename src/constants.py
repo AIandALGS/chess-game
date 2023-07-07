@@ -1,4 +1,5 @@
 from src.chess_pieces.chess_type import ChessType
+
 WINDOW_DISPLAY_WIDTH = 800
 WINDOW_DISPLAY_HEIGHT = 800
 
@@ -22,6 +23,7 @@ LIGHT_SQUARE = (240, 217, 181)
 DARK_SQUARE = (181, 136, 99)
 GREEN_CIRCLE = (106, 111, 64)
 
+# King's moves require an extra parameter so don't include it
 CHESS_PIECES = ["pawn", "knight", "bishop", "rook", "queen"]
 
 

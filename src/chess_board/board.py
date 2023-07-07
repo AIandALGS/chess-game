@@ -1,5 +1,5 @@
-from copy import deepcopy
 import pygame
+import copy
 
 from manager.chess_manager import ChessManager
 from manager.sound_manager import EffectsManager
@@ -15,7 +15,7 @@ from src.constants import (
     LIGHT_SQUARE,
     DARK_SQUARE,
     WHITE_INITIAL_POSITIONS,
-    BLACK_INITIAL_POSITIONS
+    BLACK_INITIAL_POSITIONS,
 )
 
 
@@ -28,7 +28,8 @@ class Board:
         self.__effects_manager = EffectsManager()
         self.__mouse = Mouse()
         self.__legal_moves = ChessMove.get_legal_moves(
-            self.__board, self.__current_player)
+            self.__board, self.__current_player
+        )
         self.__player_moves = []
         self.__selected = False
         self.__current_position = None
@@ -77,7 +78,7 @@ class Board:
     def get_player_moves(self, position, chess_type):
         if chess_type is not None:
             if self.__current_player in chess_type.name.lower():
-                self.__player_moves = deepcopy(self.__legal_moves[position])
+                self.__player_moves = copy.copy(self.__legal_moves[position])
                 self.__selected = True
                 self.__current_position = position
 
@@ -89,7 +90,8 @@ class Board:
 
         self.__effects_manager.play_sound("move")
         self.__legal_moves = ChessMove.get_legal_moves(
-            self.__board, self.__current_player)
+            self.__board, self.__current_player
+        )
 
     def update_moves(self, mouse_clicked, position):
         for move in self.__player_moves:
@@ -132,5 +134,4 @@ class Board:
                 )
                 screen.blit(chess_txtr, chess_rect)
 
-        self.__mouse.render(
-            screen, self.get_list_of_rects(), self.__player_moves)
+        self.__mouse.render(screen, self.get_list_of_rects(), self.__player_moves)

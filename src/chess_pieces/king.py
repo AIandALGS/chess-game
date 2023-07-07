@@ -2,7 +2,6 @@ from src.utilities.utils import Utils
 
 
 class King:
-
     @staticmethod
     def get_player_moves(board, position, player, opponent_moves):
         x, y = position
@@ -10,7 +9,7 @@ class King:
 
         for dx in (-1, 0, 1):
             for dy in (-1, 0, 1):
-                delta = (x+dx, y+dy)
+                delta = (x + dx, y + dy)
 
                 if not King.is_check(delta, opponent_moves):
                     if King.valid_move(board, delta, player):
@@ -25,9 +24,9 @@ class King:
 
         for dx in (-1, 0, 1):
             for dy in (-1, 0, 1):
-                delta = (x+dx, y+dy)
+                delta = (x + dx, y + dy)
 
-                if King.valid_move(board, delta, opponent):
+                if Utils.is_position_in_range(delta):
                     positions.append(delta)
 
         return positions
@@ -35,6 +34,15 @@ class King:
     @staticmethod
     def is_check(king_position, opponent_positions):
         return king_position in opponent_positions
+
+    # @staticmethod
+    # def is_checkmate(king_position, legal_moves):
+
+    #     count = ChessMove.get_number_of_legal_moves(legal_moves)
+
+    #     if count > 0 and not King.is_check
+
+    #     return True
 
     @staticmethod
     def valid_move(board, position, player):
