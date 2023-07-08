@@ -1,8 +1,12 @@
 from src.utilities.utils import Utils
 from src.constants import (
-    KING_POSITION,
-    LEFT_KING_POSITION,
-    RIGHT_KING_POSITION,
+    BOARD_SIZE,
+    WHITE_KING_POSITION,
+    WHITE_KING_LEFT_POSITION,
+    WHITE_KING_RIGHT_POSITION,
+    BLACK_KING_POSITION,
+    BLACK_KING_LEFT_POSITION,
+    BLACK_KING_RIGHT_POSITION,
     LEFT_ROOK_POSITION,
     RIGHT_ROOK_POSITION,
 )
@@ -22,26 +26,31 @@ class King:
                     if King.valid_move(board, delta, player):
                         positions.append(delta)
 
-        king_not_moved = castling_rights[KING_POSITION]
+        king_position = WHITE_KING_POSITION if player == "white" else BLACK_KING_POSITION
+        left_king_position = WHITE_KING_LEFT_POSITION if player == "white" else BLACK_KING_LEFT_POSITION
+        right_king_position = WHITE_KING_RIGHT_POSITION if player == "white" else BLACK_KING_RIGHT_POSITION
 
-        if king_not_moved and not King.is_check(KING_POSITION, opponent_moves):
-            if King.check_castle_left(board, castling_rights):
-                positions.append(LEFT_KING_POSITION)
+        player_castling_rights = castling_rights[player]
+        king_not_moved = player_castling_rights[king_position]
 
-            if King.check_castle_right(board, castling_rights):
-                positions.append(RIGHT_KING_POSITION)
+        if king_not_moved and not King.is_check(king_position, opponent_moves):
+            if King.check_castle_left(board, king_position, player_castling_rights):
+                positions.append(left_king_position)
+
+            if King.check_castle_right(board, king_position, player_castling_rights):
+                positions.append(right_king_position)
 
         return positions
 
     @staticmethod
-    def check_castle_left(board, castling_rights):
+    def check_castle_left(board, king_position, castling_rights):
         if not castling_rights[LEFT_ROOK_POSITION]:
             return False
 
-        x, y = KING_POSITION
+        x, y = king_position
 
-        for k in range(3):
-            dx = x - k - 1
+        for k in range(x - 1):
+            dx = k + 1
             dy = y
             delta = (dx, dy)
 
@@ -51,14 +60,14 @@ class King:
         return True
 
     @staticmethod
-    def check_castle_right(board, castling_rights):
+    def check_castle_right(board, king_position, castling_rights):
         if not castling_rights[RIGHT_ROOK_POSITION]:
             return False
 
-        x, y = KING_POSITION
+        x, y = king_position
 
-        for k in range(2):
-            dx = x + k + 1
+        for k in range(x, BOARD_SIZE - 2):
+            dx = k + 1
             dy = y
             delta = (dx, dy)
 

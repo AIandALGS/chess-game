@@ -16,27 +16,28 @@ from src.constants import (
     DARK_SQUARE,
     WHITE_INITIAL_POSITIONS,
     BLACK_INITIAL_POSITIONS,
-    WHITE_CASTLING_RIGHTS,
-    BLACK_CASTLING_RIGHTS,
-    LEFT_KING_POSITION,
-    RIGHT_KING_POSITION,
+    CASTLING_RIGHTS,
+    WHITE_KING_POSITION,
+    WHITE_KING_LEFT_POSITION,
+    WHITE_KING_RIGHT_POSITION,
+    BLACK_KING_POSITION,
+    BLACK_KING_LEFT_POSITION,
+    BLACK_KING_RIGHT_POSITION,
     LEFT_ROOK_POSITION,
     RIGHT_ROOK_POSITION,
-    KING_POSITION
 )
 
 
 class Board:
     def __init__(self):
         self.__current_player = "white"
-        self.__white_castle_rights = WHITE_CASTLING_RIGHTS
-        self.__black_castle_rights = BLACK_CASTLING_RIGHTS
+        self.__castling_rights = CASTLING_RIGHTS
         self.__board = self.initialize_board()
         self.__rects = self.initialize_rects()
         self.__effects_manager = EffectsManager()
         self.__mouse = Mouse()
         self.__legal_moves = ChessMove.get_legal_moves(
-            self.__board, self.__current_player, self.__white_castle_rights
+            self.__board, self.__current_player, self.__castling_rights
         )
         self.__player_moves = []
         self.__selected = False
@@ -91,15 +92,8 @@ class Board:
 
     def change_player(self):
         self.__current_player = "black" if self.__current_player == "white" else "white"
-
-        if self.__current_player == "white":
-            self.__legal_moves = ChessMove.get_legal_moves(
-                self.__board, self.__current_player, self.__white_castle_rights
-            )
-        else:
-            self.__legal_moves = ChessMove.get_legal_moves(
-                self.__board, self.__current_player, self.__black_castle_rights
-            )
+        self.__legal_moves = ChessMove.get_legal_moves(
+            self.__board, self.__current_player, self.__castling_rights)
 
         if ChessMove.is_checkmate(
             self.__board, self.__current_player, self.__legal_moves
@@ -114,150 +108,80 @@ class Board:
         elif ChessMove.is_check(self.__board, self.__current_player):
             self.__effects_manager.play_check_sound()
 
+    def can_castle_left(self, position):
+        player_castling_rights = self.__castling_rights[self.__current_player]
+        chess_type = self.__board[self.__current_position]
+        king_piece = chess_type is not None and "king" in chess_type.name.lower()
+        king_position = WHITE_KING_POSITION if self.__current_player == "white" else BLACK_KING_POSITION
+        left_king_position = WHITE_KING_LEFT_POSITION if self.__current_player == "white" else BLACK_KING_LEFT_POSITION
+
+        return player_castling_rights[LEFT_ROOK_POSITION] and player_castling_rights[king_position] and position == left_king_position and king_piece
+
+    def can_castle_right(self, position):
+        player_castling_rights = self.__castling_rights[self.__current_player]
+        chess_type = self.__board[self.__current_position]
+        king_piece = chess_type is not None and "king" in chess_type.name.lower()
+        king_position = WHITE_KING_POSITION if self.__current_player == "white" else BLACK_KING_POSITION
+        right_king_position = WHITE_KING_RIGHT_POSITION if self.__current_player == "white" else BLACK_KING_RIGHT_POSITION
+
+        return player_castling_rights[RIGHT_ROOK_POSITION] and player_castling_rights[king_position] and position == right_king_position and king_piece
+
+    def castle_left(self):
+        king_position = WHITE_KING_POSITION if self.__current_player == "white" else BLACK_KING_POSITION
+        left_king_position = WHITE_KING_LEFT_POSITION if self.__current_player == "white" else BLACK_KING_LEFT_POSITION
+
+        rook_position = (left_king_position[0] + 1, left_king_position[1])
+
+        self.__board[rook_position] = self.__board[LEFT_ROOK_POSITION]
+        self.__board[left_king_position] = self.__board[king_position]
+        self.__board[king_position] = None
+        self.__board[LEFT_ROOK_POSITION] = None
+
+        self.__effects_manager.play_castle_sound()
+
+    def castle_right(self):
+        king_position = WHITE_KING_POSITION if self.__current_player == "white" else BLACK_KING_POSITION
+        right_king_position = WHITE_KING_RIGHT_POSITION if self.__current_player == "white" else BLACK_KING_RIGHT_POSITION
+
+        rook_position = (right_king_position[0] - 1, right_king_position[1])
+
+        self.__board[rook_position] = self.__board[RIGHT_ROOK_POSITION]
+        self.__board[right_king_position] = self.__board[king_position]
+        self.__board[king_position] = None
+        self.__board[RIGHT_ROOK_POSITION] = None
+
+        self.__effects_manager.play_castle_sound()
+
+    def default_move(self, position):
+        self.__effects_manager.play_sound(self.__board, position)
+
+        self.__board[position] = self.__board[self.__current_position]
+        self.__board[self.__current_position] = None
+
+    def make_move(self, position):
+        if self.can_castle_left(position):
+            self.castle_left()
+        elif self.can_castle_right(position):
+            print("true")
+            self.castle_right()
+        else:
+            self.default_move(position)
+
+        self.update_castling_rights(
+            (position, self.__current_position))
+        self.__board = Matrix.rotate_board(self.__board)
+        self.clear_moveset()
+        self.change_player()
+
     def update_moves(self, mouse_clicked, position):
         for move in self.__player_moves:
             if self.check_collision_and_clicked(mouse_clicked, move):
-                if self.__current_player == "white":
-                    if (
-                        self.__white_castle_rights[RIGHT_ROOK_POSITION]
-                        and position == RIGHT_KING_POSITION
-                        and self.__current_position == KING_POSITION
-                    ):
-                        self.__effects_manager.play_sound(
-                            self.__board, position)
-                        self.update_castling_rights(
-                            (position, self.__current_position))
-
-                        new_rook_position = (
-                            RIGHT_KING_POSITION[0] - 1,
-                            RIGHT_KING_POSITION[1],
-                        )
-                        self.__board[new_rook_position] = self.__board[
-                            RIGHT_ROOK_POSITION
-                        ]
-                        self.__board[RIGHT_KING_POSITION] = self.__board[
-                            self.__current_position
-                        ]
-                        self.__board[self.__current_position] = None
-                        self.__board[RIGHT_ROOK_POSITION] = None
-
-                        self.__board = Matrix.rotate_board(self.__board)
-                        self.clear_moveset()
-                        self.change_player()
-
-                    elif (
-                        self.__white_castle_rights[LEFT_ROOK_POSITION]
-                        and position == LEFT_KING_POSITION
-                        and self.__current_position == KING_POSITION
-                    ):
-                        self.update_castling_rights(
-                            (position, self.__current_position))
-                        self.__effects_manager.play_sound(
-                            self.__board, position)
-
-                        new_rook_position = (
-                            LEFT_KING_POSITION[0] + 1,
-                            LEFT_KING_POSITION[1],
-                        )
-                        self.__board[new_rook_position] = self.__board[
-                            LEFT_ROOK_POSITION
-                        ]
-                        self.__board[LEFT_KING_POSITION] = self.__board[
-                            self.__current_position
-                        ]
-                        self.__board[self.__current_position] = None
-                        self.__board[LEFT_ROOK_POSITION] = None
-
-                        self.__board = Matrix.rotate_board(self.__board)
-                        self.clear_moveset()
-                        self.change_player()
-                    else:
-                        self.__effects_manager.play_sound(
-                            self.__board, position)
-                        self.update_castling_rights(
-                            (position, self.__current_position))
-                        self.__board[position] = self.__board[self.__current_position]
-                        self.__board[self.__current_position] = None
-
-                        self.__board = Matrix.rotate_board(self.__board)
-                        self.clear_moveset()
-                        self.change_player()
-
-                else:
-                    if (
-                        self.__white_castle_rights[RIGHT_ROOK_POSITION]
-                        and position == RIGHT_KING_POSITION
-                        and self.__current_position == KING_POSITION
-                    ):
-                        self.update_castling_rights(
-                            (position, self.__current_position))
-                        self.__effects_manager.play_sound(
-                            self.__board, position)
-
-                        new_rook_position = (
-                            RIGHT_KING_POSITION[0] - 1,
-                            RIGHT_KING_POSITION[1],
-                        )
-                        self.__board[new_rook_position] = self.__board[
-                            RIGHT_ROOK_POSITION
-                        ]
-                        self.__board[RIGHT_KING_POSITION] = self.__board[
-                            self.__current_position
-                        ]
-                        self.__board[self.__current_position] = None
-                        self.__board[RIGHT_ROOK_POSITION] = None
-
-                        self.__board = Matrix.rotate_board(self.__board)
-                        self.clear_moveset()
-                        self.change_player()
-
-                    elif (
-                        self.__white_castle_rights[LEFT_ROOK_POSITION]
-                        and position == LEFT_KING_POSITION
-                        and self.__current_position == KING_POSITION
-                    ):
-                        self.update_castling_rights(
-                            (position, self.__current_position))
-                        self.__effects_manager.play_sound(
-                            self.__board, position)
-
-                        new_rook_position = (
-                            LEFT_KING_POSITION[0] + 1,
-                            LEFT_KING_POSITION[1],
-                        )
-                        self.__board[new_rook_position] = self.__board[
-                            LEFT_ROOK_POSITION
-                        ]
-                        self.__board[LEFT_KING_POSITION] = self.__board[
-                            self.__current_position
-                        ]
-                        self.__board[self.__current_position] = None
-                        self.__board[LEFT_ROOK_POSITION] = None
-
-                        self.__board = Matrix.rotate_board(self.__board)
-                        self.clear_moveset()
-                        self.change_player()
-
-                    else:
-                        self.__effects_manager.play_sound(
-                            self.__board, position)
-                        self.update_castling_rights(
-                            (position, self.__current_position))
-                        self.__board[position] = self.__board[self.__current_position]
-                        self.__board[self.__current_position] = None
-
-                        self.__board = Matrix.rotate_board(self.__board)
-                        self.clear_moveset()
-                        self.change_player()
+                self.make_move(position)
 
     def update_castling_rights(self, positions):
         for position in positions:
-            if self.__current_player == "white":
-                if position in self.__white_castle_rights:
-                    self.__white_castle_rights[position] = False
-            else:
-                if position in self.__black_castle_rights:
-                    self.__black_castle_rights[position] = False
+            if position in self.__castling_rights[self.__current_player]:
+                self.__castling_rights[self.__current_player][position] = False
 
     def update(self, events):
         mouse_clicked = Mouse.get_mouse_click(events)

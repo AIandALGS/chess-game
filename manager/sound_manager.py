@@ -19,11 +19,17 @@ class EffectsManager:
     def play_capture_sound(self):
         mixer.Channel(0).play(mixer.Sound(self.__sound_path + "capture.wav"))
 
+    def play_castle_sound(self):
+        mixer.Channel(1).play(mixer.Sound(self.__sound_path + "castle.wav"))
+
+    def play_promote_sound(self):
+        mixer.Channel(2).play(mixer.Sound(self.__sound_path + "promote.wav"))
+
     def play_check_sound(self):
-        mixer.Channel(1).play(mixer.Sound(self.__sound_path + "check.wav"))
+        mixer.Channel(3).play(mixer.Sound(self.__sound_path + "check.wav"))
 
     def play_checkmate_sound(self):
-        mixer.Channel(2).play(mixer.Sound(self.__sound_path + "checkmate.wav"))
+        mixer.Channel(4).play(mixer.Sound(self.__sound_path + "checkmate.wav"))
 
     def play_stalemate_sound(self):
-        mixer.Channel(3).play(mixer.Sound(self.__sound_path + "stalemate.wav"))
+        mixer.Channel(5).play(mixer.Sound(self.__sound_path + "stalemate.wav"))
